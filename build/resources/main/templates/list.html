@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo List</title>
+</head>
+<body>
+<h1>Your ToDo list</h1>
+
+<div th:each="note : ${notes}">
+    <div>
+        <strong>Title:</strong>
+        <span th:text="${note.title}"></span>
+    </div>
+    <div>
+        <strong>Content:</strong>
+        <span th:text="${note.content}"></span>
+    </div>
+    <div>
+        <!-- Кнопка Delete с передачей id через URL -->
+        <form method="post" action="/note/delete">
+            <input type="hidden" name="id" th:value="${note.id}">
+            <button type="submit">Delete</button>
+        </form>
+        <!-- Кнопка Edit с передачей id через URL -->
+        <form method="get" action="/note/edit?id=${note.id}">
+            <input type="hidden" name="id" th:value="${note.id}">
+            <button type="submit">Edit</button>
+        </form>
+    </div>
+</div>
+
+<!-- Форма для создания новой заметки -->
+<div>
+    <h2>Add new note</h2>
+    <form method="post" action="/note/create">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title">
+        </div>
+        <div>
+            <label for="content">Content:</label>
+            <textarea id="content" name="content"></textarea>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>
