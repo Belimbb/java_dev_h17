@@ -1,12 +1,34 @@
 -- create tables --
-create table public.note (
-    id bigint primary key,
-    title varchar not null,
-    content varchar
+CREATE TABLE roles(
+id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+name VARCHAR(50) NOT NULL
 );
 
--- create sequences --
-create sequence note_seq start with 1;
+CREATE TABLE users(
+id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+username VARCHAR(100) NOT NULL UNIQUE CHECK(LENGTH(username)>=2 AND LENGTH(username)<=100),
+password VARCHAR(100) NOT NULL,
+email VARCHAR(100) NOT NULL,
+last_updated_date DATE NOT NULL,
+created_date DATE NOT NULL
+);
 
--- set sequences --
-alter table public.note alter column id set default nextval('note_seq');
+CREATE TABLE user_roles(
+id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+user_id BIGINT NOT NULL,
+role_id BIGINT NOT NULL
+);
+
+CREATE TABLE note(
+id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+user_id BIGINT NOT NULL,
+title VARCHAR(250) NOT NULL CHECK(LENGTH(title)>=3 AND LENGTH(title)<=250),
+content VARCHAR NOT NULL,
+last_updated_date DATE NOT NULL,
+created_date DATE NOT NULL
+);
+
+-- connect tables --
+ALTER TABLE public.note ADD CONSTRAINT note_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+ALTER TABLE public.user_roles ADD CONSTRAINT user_role_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+ALTER TABLE public.user_roles ADD CONSTRAINT role_user_fk FOREIGN KEY (role_id) REFERENCES public.roles(id) ON DELETE CASCADE;
