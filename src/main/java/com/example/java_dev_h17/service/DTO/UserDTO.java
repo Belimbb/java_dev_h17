@@ -1,20 +1,22 @@
-package com.example.java_dev_h17.controller.DTO;
+package com.example.java_dev_h17.service.DTO;
 
-import com.example.java_dev_h17.data.entity.Note;
 import com.example.java_dev_h17.data.entity.Role;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+@Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
     private Long id;
     private String name;
     private String password;
     private String email;
-    private Set<Role> roles = new HashSet<>();
-    private List<Note> notes;
+    private Set<Role> roles;
 }

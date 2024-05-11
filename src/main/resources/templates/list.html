@@ -18,12 +18,12 @@
     </div>
     <div>
         <!-- Кнопка Delete с передачей id через URL -->
-        <form method="post" action="/note/delete">
+        <form method="post" action="/note/v1/delete">
             <input type="hidden" name="id" th:value="${note.id}">
             <button type="submit">Delete</button>
         </form>
         <!-- Кнопка Edit с передачей id через URL -->
-        <form method="get" action="/note/edit?id=${note.id}">
+        <form method="get" action="/note/v1/edit?id=${note.id}">
             <input type="hidden" name="id" th:value="${note.id}">
             <button type="submit">Edit</button>
         </form>
@@ -33,7 +33,7 @@
 <!-- Форма для создания новой заметки -->
 <div>
     <h2>Add new note</h2>
-    <form method="post" action="/note/create">
+    <form method="post" action="/note/v1/create">
         <div>
             <label for="title">Title:</label>
             <input type="text" id="title" name="title">

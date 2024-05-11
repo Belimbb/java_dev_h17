@@ -1,13 +1,11 @@
-package com.example.java_dev_h17.controller.service.noteDTO;
+package com.example.java_dev_h17.service.service.noteDTO;
 
-import com.example.java_dev_h17.controller.DTO.NoteDTO;
+import com.example.java_dev_h17.service.DTO.NoteDTO;
 import com.example.java_dev_h17.data.entity.Note;
 import com.example.java_dev_h17.data.service.note.NoteService;
 
 import lombok.AllArgsConstructor;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
@@ -15,18 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class NoteDTOService implements NoteDTOCrudService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NoteDTOService.class);
     private final NoteService noteService;
 
     public void add(NoteDTO noteDTO){
-        Note note = new Note();
-        note.setTitle(noteDTO.getTitle());
-        note.setContent(noteDTO.getContent());
+        Note note = Note.builder()
+                .title(noteDTO.getTitle())
+                .content(noteDTO.getContent())
+                .build();
 
-        LOGGER.info("NoteDTO has been transferred to note service. NoteDTO: {}", noteDTO);
+        log.info("NoteDTO has been transferred to note service. NoteDTO: {}", noteDTO);
         noteService.add(note);
     }
 
@@ -34,7 +33,7 @@ public class NoteDTOService implements NoteDTOCrudService {
     public NoteDTO getById(UUID id) {
         Note note = noteService.getById(id);
 
-        LOGGER.info("NoteDTO with id {} has been retrieved from note service", id);
+        log.info("NoteDTO with id {} has been retrieved from note service", id);
         return parseToNoteDTO(note);
     }
 
@@ -47,7 +46,7 @@ public class NoteDTOService implements NoteDTOCrudService {
             noteDTOS.add(parseToNoteDTO(note));
         }
 
-        LOGGER.info("Todo list has been retrieved from note service");
+        log.info("Todo list has been retrieved from note service");
         return noteDTOS;
     }
 
@@ -55,33 +54,32 @@ public class NoteDTOService implements NoteDTOCrudService {
     public void update(NoteDTO noteDTO) {
         Note note = parseToNote(noteDTO);
 
-        LOGGER.info("NoteDTO with id {} has been transferred on update", noteDTO.getId());
+        log.info("NoteDTO with id {} has been transferred on update", noteDTO.getId());
         noteService.update(note);
     }
 
     @Override
     public void deleteById(UUID id) {
         noteService.deleteById(id);
-        LOGGER.info("NoteDTO with id {} has been transferred on delete", id);
+        log.info("NoteDTO with id {} has been transferred on delete", id);
     }
 
     public NoteDTO parseToNoteDTO(Note note){
-        NoteDTO noteDTO = new NoteDTO();
 
-        noteDTO.setId(note.getId());
-        noteDTO.setTitle(note.getTitle());
-        noteDTO.setContent(note.getContent());
-
-        return noteDTO;
+        return NoteDTO
+                .builder()
+                .id(note.getId())
+                .title(note.getTitle())
+                .content(note.getContent())
+                .build();
     }
 
     public Note parseToNote(NoteDTO noteDTO){
-        Note note = new Note();
-
-        note.setId(noteDTO.getId());
-        note.setTitle(noteDTO.getTitle());
-        note.setContent(noteDTO.getContent());
-
-        return note;
+        return Note
+                .builder()
+                .id(noteDTO.getId())
+                .title(noteDTO.getTitle())
+                .content(noteDTO.getContent())
+                .build();
     }
 }

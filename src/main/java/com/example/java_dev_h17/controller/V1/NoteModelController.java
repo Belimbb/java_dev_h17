@@ -1,12 +1,10 @@
-package com.example.java_dev_h17.controller.control;
+package com.example.java_dev_h17.controller.V1;
 
-import com.example.java_dev_h17.controller.DTO.NoteDTO;
-import com.example.java_dev_h17.controller.service.noteDTO.NoteDTOService;
+import com.example.java_dev_h17.service.DTO.NoteDTO;
+import com.example.java_dev_h17.service.service.noteDTO.NoteDTOService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,22 +12,23 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("/note")
+@Slf4j
+@RequestMapping("/note/v1")
 @RestController
 @RequiredArgsConstructor
-public class NoteController implements NoteRestController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NoteController.class);
+public class NoteModelController implements NoteModelRestController {
     private final NoteDTOService dtoService;
 
     @PostMapping ("/create")
     @Override
     public ModelAndView createNote(@RequestParam(name = "title") String title, @RequestParam(name = "content") String content) {
-        NoteDTO noteDTO = new NoteDTO();
-        noteDTO.setTitle(title);
-        noteDTO.setContent(content);
+        NoteDTO noteDTO = NoteDTO.builder()
+                .title(title)
+                .content(content)
+                .build();
 
         dtoService.add(noteDTO);
-        return new ModelAndView("redirect:/note/list");
+        return new ModelAndView("redirect:/note/v1/list");
     }
 
     @Override
@@ -52,13 +51,14 @@ public class NoteController implements NoteRestController {
     public ModelAndView updateNote(@RequestParam(name = "id") UUID id,
                                    @RequestParam(name = "title") String title,
                                    @RequestParam(name = "content") String content) {
-        NoteDTO noteDTO = new NoteDTO();
-        noteDTO.setId(id);
-        noteDTO.setTitle(title);
-        noteDTO.setContent(content);
+        NoteDTO noteDTO = NoteDTO.builder()
+                .id(id)
+                .title(title)
+                .content(content)
+                .build();
 
         dtoService.update(noteDTO);
-        return new ModelAndView("redirect:/note/list");
+        return new ModelAndView("redirect:/note/v1/list");
     }
 
 
@@ -66,7 +66,7 @@ public class NoteController implements NoteRestController {
     public ModelAndView transportOnUpdate(@RequestParam(name = "id") UUID id) {
         ModelAndView modelAndView = new ModelAndView("edit");
         modelAndView.addObject("note", dtoService.getById(id));
-        LOGGER.info("Note transferred on update");
+        log.info("Note transferred on update");
         return modelAndView;
     }
 
@@ -74,6 +74,6 @@ public class NoteController implements NoteRestController {
     @Override
     public ModelAndView deleteNote(@RequestParam(name = "id")UUID id) {
         dtoService.deleteById(id);
-        return new ModelAndView("redirect:/note/list");
+        return new ModelAndView("redirect:/note/v1/list");
     }
 }

@@ -2,22 +2,22 @@ package com.example.java_dev_h17.data.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import java.util.HashSet;
-import java.util.List;
+import lombok.*;
+
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
+@Builder
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table( name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
-public class User extends BaseEntity {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,8 +37,5 @@ public class User extends BaseEntity {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Note> notes;
+    private Set<Role> roles;
 }

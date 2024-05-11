@@ -1,6 +1,6 @@
-package com.example.java_dev_h17.controller.service.noteDTO;
+package com.example.java_dev_h17.service.service.noteDTO;
 
-import com.example.java_dev_h17.controller.DTO.NoteDTO;
+import com.example.java_dev_h17.service.DTO.NoteDTO;
 
 import java.util.List;
 import java.util.UUID;

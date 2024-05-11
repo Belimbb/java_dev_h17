@@ -1,6 +1,6 @@
-package com.example.java_dev_h17.controller.service.userDTO;
+package com.example.java_dev_h17.service.service.userDTO;
 
-import com.example.java_dev_h17.controller.DTO.UserDTO;
+import com.example.java_dev_h17.service.DTO.UserDTO;
 
 import java.util.List;
 

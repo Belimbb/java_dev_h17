@@ -3,17 +3,17 @@ package com.example.java_dev_h17.data.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
-@Entity
+@Builder
 @Data
-public class Note extends BaseEntity {
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "notes")
+public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -24,13 +24,4 @@ public class Note extends BaseEntity {
 
     @Column(nullable = false)
     private String content;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
 }
