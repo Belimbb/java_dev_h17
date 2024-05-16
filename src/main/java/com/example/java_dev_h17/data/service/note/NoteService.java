@@ -30,8 +30,8 @@ public class NoteService implements NoteCrudService {
     }
 
     @Override
-    public Note getById(UUID noteId) {
-        Optional<Note> note = noteRepository.findById(noteId);
+    public Note getById(UUID id) {
+        Optional<Note> note = noteRepository.findById(id);
         if (note.isPresent()){
             log.info("Note retrieved from DB. Note: {}", note);
             return note.get();
@@ -55,9 +55,9 @@ public class NoteService implements NoteCrudService {
     }
 
     @Override
-    public void deleteById(UUID noteId) {
-        noteRepository.deleteById(noteId);
+    public void deleteById(UUID id) {
+        noteRepository.deleteById(id);
 
-        log.info("Note with id {} removed", noteId);
+        log.info("Note with id {} removed", id);
     }
 }

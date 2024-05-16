@@ -22,9 +22,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "username")
+    @Column(nullable = false)
     @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters")
-    private String name;
+    private String username;
 
     @Column(nullable = false)
     @Size(max = 100, message = "Password must be lower than 100 characters")

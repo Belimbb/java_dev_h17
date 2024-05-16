@@ -1,4 +1,4 @@
-package com.example.java_dev_h17.controller.V2;
+package com.example.java_dev_h17.controller.V2.control;
 
 import com.example.java_dev_h17.service.DTO.NoteDTO;
 import org.springframework.http.ResponseEntity;

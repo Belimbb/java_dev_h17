@@ -1,10 +1,13 @@
 package com.example.java_dev_h17.data.service.user;
 
+import com.example.java_dev_h17.controller.V2.security.jwt.UserDetailsImpl;
 import com.example.java_dev_h17.data.entity.User;
 
+import com.example.java_dev_h17.service.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +21,9 @@ public class UserService implements UserCrudService{
 
     @Override
     public void add(User user) {
-        user.setId(null);
         List<User> users = userRepository.findAll();
         if (!users.contains(user)){
+            user.setId(null);
             userRepository.save(user);
             log.info("Added new user to todo list. User: {}", user);
         } else {
@@ -29,13 +32,13 @@ public class UserService implements UserCrudService{
     }
 
     @Override
-    public User getById(Long id) {
-        Optional<User> user= userRepository.findById(id);
-        if (user.isPresent()){
-            log.info("User retrieved from DB. User: {}", user);
-            return user.get();
-        }
-        throw new IllegalArgumentException("Invalid id. Please enter existing id");
+    public Optional<User> getById(Long id) throws UserNotFoundException {
+        Optional<User> user = userRepository.findById(id);
+
+        user.ifPresent(u -> log.info("User retrieved from DB: {}", u));
+        user.orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+
+        return user;
     }
 
     @Override
@@ -58,5 +61,18 @@ public class UserService implements UserCrudService{
         userRepository.deleteById(id);
 
         log.info("User with id {} removed", id);
+    }
+
+    public User findUserByUsername (String username) throws UsernameNotFoundException{
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+    }
+
+    public Boolean existByUsername (String username){
+        return userRepository.existsByUsername(username);
+    }
+
+    public Boolean existByEmail (String email){
+        return userRepository.existsByEmail(email);
     }
 }

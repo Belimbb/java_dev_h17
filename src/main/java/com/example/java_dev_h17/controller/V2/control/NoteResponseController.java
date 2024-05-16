@@ -1,4 +1,4 @@
-package com.example.java_dev_h17.controller.V2;
+package com.example.java_dev_h17.controller.V2.control;
 
 import com.example.java_dev_h17.service.DTO.NoteDTO;
 import com.example.java_dev_h17.service.service.noteDTO.NoteDTOService;
@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
+@Validated
 @RequestMapping("/note/v2")
 @RestController
 @RequiredArgsConstructor
