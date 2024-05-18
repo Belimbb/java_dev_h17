@@ -1,6 +1,8 @@
 package com.example.java_dev_h17.controller.V1;
 
 import com.example.java_dev_h17.service.DTO.NoteDTO;
+import com.example.java_dev_h17.service.exception.NoteAlreadyExistException;
+import com.example.java_dev_h17.service.exception.NoteNotFoundException;
 import com.example.java_dev_h17.service.service.noteDTO.NoteDTOService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,7 @@ public class NoteModelController implements NoteModelRestController {
 
     @PostMapping ("/create")
     @Override
-    public ModelAndView createNote(@RequestParam(name = "title") String title, @RequestParam(name = "content") String content) {
+    public ModelAndView createNote(@RequestParam(name = "title") String title, @RequestParam(name = "content") String content) throws NoteAlreadyExistException {
         NoteDTO noteDTO = NoteDTO.builder()
                 .title(title)
                 .content(content)
@@ -32,7 +34,7 @@ public class NoteModelController implements NoteModelRestController {
     }
 
     @Override
-    public ModelAndView getNote(UUID id) {
+    public ModelAndView getNote(UUID id) throws NoteNotFoundException {
         NoteDTO note = dtoService.getById(id);
         return null;
     }
@@ -63,7 +65,7 @@ public class NoteModelController implements NoteModelRestController {
 
 
     @GetMapping("/edit")
-    public ModelAndView transportOnUpdate(@RequestParam(name = "id") UUID id) {
+    public ModelAndView transportOnUpdate(@RequestParam(name = "id") UUID id) throws NoteNotFoundException {
         ModelAndView modelAndView = new ModelAndView("edit");
         modelAndView.addObject("note", dtoService.getById(id));
         log.info("Note transferred on update");

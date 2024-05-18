@@ -4,6 +4,8 @@ import com.example.java_dev_h17.service.DTO.NoteDTO;
 import com.example.java_dev_h17.data.entity.Note;
 import com.example.java_dev_h17.data.service.note.NoteService;
 
+import com.example.java_dev_h17.service.exception.NoteAlreadyExistException;
+import com.example.java_dev_h17.service.exception.NoteNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +21,7 @@ import java.util.UUID;
 public class NoteDTOService implements NoteDTOCrudService {
     private final NoteService noteService;
 
-    public void add(NoteDTO noteDTO){
+    public void add(NoteDTO noteDTO) throws NoteAlreadyExistException {
         Note note = Note.builder()
                 .title(noteDTO.getTitle())
                 .content(noteDTO.getContent())
@@ -30,7 +32,7 @@ public class NoteDTOService implements NoteDTOCrudService {
     }
 
     @Override
-    public NoteDTO getById(UUID id) {
+    public NoteDTO getById(UUID id) throws NoteNotFoundException {
         Note note = noteService.getById(id);
 
         log.info("NoteDTO with id {} has been retrieved from note service", id);

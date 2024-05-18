@@ -1,9 +1,6 @@
 package com.example.java_dev_h17.controller.V2.security;
 
-import com.example.java_dev_h17.service.exception.NoteNotFoundException;
-import com.example.java_dev_h17.service.exception.UserAlreadyExistException;
-import com.example.java_dev_h17.service.exception.UserIncorrectPasswordException;
-import com.example.java_dev_h17.service.exception.UserNotFoundException;
+import com.example.java_dev_h17.service.exception.*;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,6 +18,11 @@ import static java.util.Arrays.asList;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(NoteAlreadyExistException.class)
+    public ResponseEntity<Map<String, List<String>>> handleNoteAlreadyExistException(NoteAlreadyExistException e) {
+        return getErrorsMap(e, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<Map<String, Map<String, List<String>>>> handleValidationErrors(MethodArgumentNotValidException ex) {
