@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class ApplicationTests {
+class NoteServiceTest {
 
 	@Mock
 	private NoteRepository noteRepository;
@@ -33,14 +33,11 @@ class ApplicationTests {
 	}
 
 	@Test
-	void contextLoads() {
-	}
-
-	@Test
-	void testAdd() throws NoteAlreadyExistException {
+	void testAddNote_Success() throws NoteAlreadyExistException {
+		// Arrange
 		Note note = Note.builder()
-				.title("Test Title")
-				.content("Test Content")
+				.title("Test Note")
+				.content("This is a test note.")
 				.build();
 
 		when(noteRepository.findAll()).thenReturn(Collections.emptyList());
@@ -49,6 +46,27 @@ class ApplicationTests {
 		noteService.add(note);
 
 		// Assert
-		verify(noteRepository, times(1)).save(note);
+		verify(noteRepository, times(1)).save(any(Note.class));
+		verify(noteRepository, times(1)).findAll();
+	}
+
+	@Test
+	void testAddNote_AlreadyExists() {
+		// Arrange
+		Note note = Note.builder()
+				.title("Test Note")
+				.content("This is a test note.")
+				.build();
+
+		when(noteRepository.findAll()).thenReturn(Collections.singletonList(note));
+
+		// Act & Assert
+		NoteAlreadyExistException exception = org.junit.jupiter.api.Assertions.assertThrows(NoteAlreadyExistException.class, () -> {
+			noteService.add(note);
+		});
+
+		org.junit.jupiter.api.Assertions.assertEquals("Test Note", exception.getMessage());
+		verify(noteRepository, times(0)).save(any(Note.class));
+		verify(noteRepository, times(1)).findAll();
 	}
 }
