@@ -54,7 +54,6 @@ class ApplicationTests {
 
 		List<Note> expectedNotes = Arrays.asList(note1, note2);
 
-		// Настроим mock так, чтобы findAll() возвращал список заметок
 		Mockito.when(noteRepository.findAll()).thenReturn(expectedNotes);
 
 		// Act
