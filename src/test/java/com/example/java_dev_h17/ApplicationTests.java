@@ -1,65 +1,49 @@
 package com.example.java_dev_h17;
 
-import com.example.java_dev_h17.data.entity.Note;
-import com.example.java_dev_h17.data.service.note.NoteRepository;
-import com.example.java_dev_h17.data.service.note.NoteService;
+import org.junit.jupiter.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.example.java_dev_h17.service.DTO.NoteDTO;
 import com.example.java_dev_h17.service.exception.NoteAlreadyExistException;
 import com.example.java_dev_h17.service.service.noteDTO.NoteDTOService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-@ExtendWith(MockitoExtension.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.AUTO_CONFIGURED)
 @SpringBootTest
 class ApplicationTests {
 
-	@Mock
-	private NoteRepository noteRepository;
+	@Autowired
+	NoteDTOService noteDTOService;
 
-	@InjectMocks
-	private NoteService noteService;
+	NoteDTO noteDTO;
 
 	@BeforeEach
-	void setUp() {
-		MockitoAnnotations.openMocks(this);
+	public void beforeEach() {
+		noteDTO = NoteDTO.builder()
+				.title("TestTitle")
+				.content("TestContent")
+				.build();
 	}
 
 	@Test
-	void testListAll() {
-		// Arrange
-		Note note1 = Note.builder()
-				.title("Test Note 1")
-				.content("This is a test note 1.")
-				.build();
+	void contextLoads() {
+		assertThat(noteDTOService).isNotNull();
+	}
 
-		Note note2 = Note.builder()
-				.title("Test Note 2")
-				.content("This is a test note 2.")
-				.build();
+	@Test
+	void testListAll() throws NoteAlreadyExistException {
+		//When
+		noteDTOService.add(noteDTO);
+		List<NoteDTO> listNotes = noteDTOService.listAll();
 
-		List<Note> expectedNotes = Arrays.asList(note1, note2);
-
-		Mockito.when(noteRepository.findAll()).thenReturn(expectedNotes);
-
-		// Act
-		List<Note> actualNotes = noteService.listAll();
-
-		// Assert
-		assertEquals(expectedNotes, actualNotes);
+		//Then
+		int expected = 1;
+		Assertions.assertEquals(expected, listNotes.size());
 	}
 }
